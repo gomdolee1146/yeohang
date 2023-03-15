@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/gomdolee1146/yeohang#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.4.1"

@@ -1,0 +1,30 @@
+*{margin:0; padding:0; border:0; outline:0; text-size-adjust:none; -webkit-tap-highlight-color:transparent;}
+html{/*-webkit-overflow-scrolling:touch; -ms-overflow-scrolling:touch;*/ text-size-adjust:none; -webkit-text-size-adjust:none; }
+body{width:100%; min-width:320px; line-height:1.25; background:#fff; letter-spacing:-0.05em; font-size:14px; font-family:'NotoSansKR', '맑은 고딕', "Malgun Gothic", sans-serif; }
+header, article, footer{background:#fff; }
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section{display:block; }
+audio, canvas, progress, video{display:inline-block; vertical-align:baseline; }
+audio, canvas, video{display:inline; *zoom:1; }
+
+a{display:block; color:#111; text-decoration:none; cursor:pointer; }
+em, i, address{font-weight:400; font-style:normal; }
+dl, ul, ol, li, menu{list-style:none; }
+blockquote, q{quotes:none; }
+blockquote:before, blockquote:after, q:before, q:after{content:''; }
+h1, h2, h3, h4, h5, h6{font-size:14px; font-weight:400; color:#111; }
+
+img, fieldset{border:0 none; }
+button{border:0 none; background:none; letter-spacing:-.05em; cursor:pointer; } 
+legend, caption{display:none; clear:both; }
+button, input, textarea, select, table{line-height:inherit; margin:0; font-size:inherit; font-family:inherit;}
+table{border-spacing:0; border-collapse:collapse; }
+input, textarea, select{border:0; background-image:none; box-shadow:none; outline:none; -webkit-appearance:none; appearance:none; caret-color:#a8a8a8; -webkit-border-radius:0; }
+input::placeholder{color:#aaa; }
+textarea{resize:none; }
+label{cursor:pointer; }
+[contenteditable = 'true']{outline:none; caret-color:#a8a8a8; }
+sub,sup{position:relative; vertical-align:baseline; font-size:.75rem; }
+sup{top:-.5rem; }
+sub{bottom:.25rem; }
+small{font-size:.75rem; }
+pre{font-family:'맑은 고딕', "Malgun Gothic", sans-serif; white-space:pre-wrap; word-wrap:break-word; }

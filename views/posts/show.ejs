@@ -1,37 +1,23 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <%- include ('../components/head.ejs') %>
-    </head>
-    <body>
-        <header>
-            <%- include ('../components/header.ejs') %>
-        </header>
-        <div class="posts">
-            <%- include ('./common/top.ejs') %>
-            <div class="show">
-                <h3> <%= data.title %></h3>
-                <div class="time">Created At <br />
-                    <%= data.createdAt.toLocaleDateString() %> <br />
-                    <%= data.createdAt.toLocaleTimeString() %> 
-                </div>
-                <% if (data.updatedAt) { %>
-                    <div class="time">Updated at <br />
-                        <%= data.updatedAt.toLocaleDateString() %> <br />
-                        <%= data.updatedAt.toLocaleTimeString() %> 
-                    </div>
-                <% } %>
-
-                <h3></h3>
-                <h3> </h3>
-                <h3> </h3>
-                <h3> <%= %></h3>
-                <h3> <%= %></h3>
-
-            </div>
+<%- contentFor('post') %>
+<div class="posts">
+    <%- include ('./common/top.ejs') %>
+    <div class="show">
+        <h3> <%= data.title %></h3>
+        <div class="time">Created At <br />
+            <%= data.createdAt.toLocaleDateString() %> <br />
+            <%= data.createdAt.toLocaleTimeString() %> 
         </div>
-        <footer>
-            <%- include ('../components/footer.ejs') %>
-        </footer>
-    </body>
-</html>
+        <% if (data.updatedAt) { %>
+            <div class="time">Updated at <br />
+                <%= data.updatedAt.toLocaleDateString() %> <br />
+                <%= data.updatedAt.toLocaleTimeString() %> 
+            </div>
+        <% } %>
+        <p class="body"> <%= data.body %></p>
+        <div class="tools">
+            <a href="/posts/<%= data._id %>/edit"><button>EDIT</button></a>
+            <!-- 삭제버튼 만들기! -->
+        </div>
+    </div>
+    <a href="/posts"><button>Back</button></a>
+</div>

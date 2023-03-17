@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <%- include ('../components/head.ejs') %>
-    </head>
-    <body>
-        <header>
-            <%- include ('../components/header.ejs') %>
-        </header>
-        <div class="posts">
-            <%- include ('./common/top.ejs') %>
-            <div class="index">
-                <a href="/posts/new"><button>New</button></a>
-                <ul>
-                    <% data.forEach(function(e){ %>
-                        <li>
-                            <a href="/posts/<%= e._id %>"><%= e.title %></a>
-                            <span> <%= e.createdAt.toLocaleDateString() %></span>
-                        </li>
-                    <% }) %>
-                </ul>
-            </div>
-        </div>
-        <footer>
-            <%- include ('../components/footer.ejs') %>
-        </footer>
-    </body>
-</html>
+<%- contentFor('post') %>
+<div class="posts">
+    <%- include ('./common/top.ejs') %>
+    <div class="new">
+        <form class="posts_form" action="/posts" method="post">
+            <label>Title</label>
+            <input type="text" name="post[title]" value="" />
+            
+            <label>Body</label>
+            <textarea name="post[body]"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <a href="/posts"><button>Back</button></a>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include ('./components/head.ejs') %>
+    </head>
+    <body>
+        <header>
+            <%- include ('./components/header.ejs') %>
+        </header>
+        <%- defineContent('post') %>
+        <%- body %>
+        <footer>
+            <%- include ('./components/footer.ejs') %>
+        </footer>
+        <%- script %>
+    </body>
+</html>

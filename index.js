@@ -1,4 +1,5 @@
 const express = require('express')
+const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
 const app = express()
 const port = 3000
@@ -18,6 +19,11 @@ db.on('error', function(err) {
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json()); // 미들웨어 - json으로 데이터 분석.
+app.use(bodyParser.urlencoded({extended:true}))   // JSON 데이터를 전송할 경우 받는 body parser
+
+app.use(expressLayouts);
+app.set('layout', 'layout');
+app.set("layout extractScripts", true);
 
 var postSchema = mongoose.Schema({
   title:        {type:String, required:true},
@@ -36,6 +42,10 @@ app.get('/posts', function(req, res) {    // index
     .catch(err => {
       return res.json({success:false, message:err})
     })
+})
+
+app.get('/posts/new', function(req, res){   // new
+  res.render('posts/new')
 })
 
 app.post('/posts', function(req, res){    // create

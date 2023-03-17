@@ -20,17 +20,18 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json()); // 미들웨어 - json으로 데이터 분석.
 
 var postSchema = mongoose.Schema({
-  title: {type:String, required:true},
-  body: {type:String, required:true},
-  createdAt: {type:Date, default:Date.now},
-  updatedAt: Date  
+  title:        {type:String, required:true},
+  body:         {type:String, required:true},
+  createdAt:    {type:Date, default:Date.now},
+  updatedAt:    Date  
 })
 var Post = mongoose.model('post', postSchema);
 
 app.get('/posts', function(req, res) {    // index
-  Post.find().exec()
+  Post.find({}).sort('-createdAt')
     .then(posts => {
-      return res.json({success:true, data:posts});  
+      // return res.json({success:true, data:posts});  
+      return res.render('posts/index', {data:posts})
     })
     .catch(err => {
       return res.json({success:false, message:err})
@@ -48,9 +49,10 @@ app.post('/posts', function(req, res){    // create
 })
 
 app.get('/posts/:id', function(req, res){    // show
-  Post.findById(req.param.id)
+  Post.findById(req.params.id)
     .then(post => {
-      return res.json({success:true, data:post})  // 이부분 좀 더 확인..!
+      // return res.json({success:true, data:post})  
+      return res.render('post/show', {data:post});
     })
     .catch(err => {
       return res.json({success:false, message:err})
@@ -81,11 +83,10 @@ app.delete("/posts/:id", function(req, res){
 
 
 var dataSchema = mongoose.Schema({
-  name: String,
-  count: Number
+  name:         String,
+  count:        Number
 });
 var Data = mongoose.model('data', dataSchema);
-
 
 Data.findOne({name:'myData'}).exec()
   .then((data) => {

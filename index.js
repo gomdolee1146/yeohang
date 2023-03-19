@@ -5,6 +5,7 @@ const app = express()
 const port = 3000
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override');
 
 mongoose.connect(process.env.MONGO_DB);
 
@@ -20,6 +21,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json()); // 미들웨어 - json으로 데이터 분석.
 app.use(bodyParser.urlencoded({extended:true}))   // JSON 데이터를 전송할 경우 받는 body parser
+app.use(methodOverride("_method"));
 
 app.use(expressLayouts);
 app.set('layout', 'layout');
@@ -36,8 +38,7 @@ var Post = mongoose.model('post', postSchema);
 app.get('/posts', function(req, res) {    // index
   Post.find({}).sort('-createdAt')
     .then(posts => {
-      // return res.json({success:true, data:posts});  
-      return res.render('posts/index', {data:posts})
+      res.render('posts/index', {data:posts})
     })
     .catch(err => {
       return res.json({success:false, message:err})
@@ -51,7 +52,8 @@ app.get('/posts/new', function(req, res){   // new
 app.post('/posts', function(req, res){    // create
   Post.create(req.body.post)
     .then(post => {
-      return res.json({success:true, data:post})
+      // return res.json({success:true, data:post}) // 확인용.
+      res.redirect('/posts')
     })
     .catch(err => {
       return res.json({success:false, message:err})
@@ -62,28 +64,40 @@ app.get('/posts/:id', function(req, res){    // show
   Post.findById(req.params.id)
     .then(post => {
       // return res.json({success:true, data:post})  
-      return res.render('post/show', {data:post});
+      return res.render('posts/show', {data:post});
     })
     .catch(err => {
       return res.json({success:false, message:err})
     })
 })
 
-app.put('/posts/:id', function(req, res){    // update
-  req.body.post.updatedAt = Date.now();
-  Post.findByIdAndUpdate(req.params.id, req.body.post)
+app.get("/posts/:id/edit", function(req, res){    // edit
+  Post.findById(req.params.id)
     .then(post => {
-      return res.json({success:true, message:post._id+" updated"})
+      res.render('posts/edit', {data:post})
     })
     .catch(err => {
       return res.json({success:false, message:err});
     })
 })
 
-app.delete("/posts/:id", function(req, res){
+app.post('/posts/:id', function(req, res){    // update
+  req.body.post.updatedAt = Date.now();
+  Post.findByIdAndUpdate(req.params.id, req.body.post)
+    .then(post => {
+      // return res.json({success:true, message:post._id+" updated"})
+      res.redirect('/posts/'+req.params.id);
+    })
+    .catch(err => {
+      return res.json({success:false, message:err});
+    })
+})
+
+app.delete("/posts/:id", function(req, res){    // destroy (delete)
   Post.findByIdAndRemove(req.params.id)
     .then(post => {
-      return res.json({success:true, message:post._id+" deleted"})
+      // return res.json({success:true, message:post._id+" deleted"})
+      res.redirect('/posts')
     })
     .catch(err => {
       return res.json({success:false, message:err});

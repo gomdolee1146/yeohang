@@ -16,7 +16,9 @@
         <p class="body"> <%= data.body %></p>
         <div class="tools">
             <a href="/posts/<%= data._id %>/edit"><button>EDIT</button></a>
-            <!-- 삭제버튼 만들기! -->
+            <form class="btn_delete" action="/posts/<%=data._id%>?_method=delete" method="post">
+                <button type="submit">Delete</button>
+            </form>
         </div>
     </div>
     <a href="/posts"><button>Back</button></a>

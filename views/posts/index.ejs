@@ -1,13 +1,17 @@
 <%- contentFor('post') %>
 <div class="posts">
     <%- include ('./common/top.ejs') %>
-    <div class="index">
-        <a href="/posts/new"><button>New</button></a>
-        <ul>
+    <a class="posts__btn-new" href="/posts/new"><button>New</button></a>
+    <div class="posts__wrap">
+        <ul class="posts__container">
             <% data.forEach(function(e){ %>
-                <li>
-                    <a href="/posts/<%= e._id %>"><%= e.title %></a>
-                    <span> <%= e.createdAt.toLocaleDateString() %></span>
+                <li class="posts__list">
+                    <a class="posts__link" href="/posts/<%= e._id %>">
+                        <div class="posts__box">
+                            <p class="posts__title"><%= e.title %></p>
+                            <span class="posts__date"> <%= e.createdAt.toLocaleDateString() %></span>
+                        </div>
+                    </a>
                 </li>
             <% }) %>
         </ul>

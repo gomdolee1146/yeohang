@@ -3,15 +3,18 @@
     <head>
         <%- include ('./components/head.ejs') %>
     </head>
-    <body>
-        <header>
-            <%- include ('./components/header.ejs') %>
-        </header>
-        <%- defineContent('post') %>
-        <%- body %>
-        <footer>
-            <%- include ('./components/footer.ejs') %>
-        </footer>
+    <body class="pc__bg">
+        <div class="pc__container">
+            <header>
+                <%- include ('./components/header.ejs') %>
+            </header>
+            <%- defineContent('post') %>
+            <%- body %>
+            <footer>
+                <%- include ('./components/footer.ejs') %>
+            </footer>
+        </div>
+     
         <%- script %>
     </body>
 </html>

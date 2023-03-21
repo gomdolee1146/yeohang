@@ -1,15 +1,14 @@
 <%- contentFor('post') %>
-<div class="posts">
-    <%- include ('./common/top.ejs') %>
-    <div class="new">
-        <form class="posts_form" action="/posts" method="post">
-            <label>Title</label>
-            <input type="text" name="post[title]" value="" />
-            
-            <label>Body</label>
-            <textarea name="post[body]"></textarea>
-            <button type="submit">Submit</button>
-        </form>
-        <a href="/posts"><button>Back</button></a>
-    </div>
+<%- include ('./common/top.ejs') %>
+<div class="new">
+    <form class="posts_form" action="/posts" method="post">
+        <label>Title</label>
+        <input type="text" name="post[title]" value="" />
+        
+        <label>Body</label>
+        <textarea name="post[body]"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    <a href="/posts"><button>Back</button></a>
 </div>
+<%- include ('./common/btm.ejs') %>

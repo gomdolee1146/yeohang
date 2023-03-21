@@ -1,0 +1,69 @@
+:root {
+	--headerH: 60px;
+	--footerH: 50px;
+}
+header {
+    height: var(--headerH);
+    line-height: var(--headerH);
+    border-bottom: 1px solid #efefef;
+    background: #fff;
+    text-align: center;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* ==== section ==== */
+.section {
+	padding-bottom: var(--footerH);
+	box-sizing: border-box;
+}
+
+/* ==== footer ==== */
+.footer_wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	width: 100%;
+	max-width: 520px;
+	left: 50%;
+	bottom: 0;
+	height: var(--footerH);
+    line-height: var(--footerH);
+    background: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    color: #636363;
+	box-shadow: 0 -4px 8px rgba(0,0,0,.16);
+    text-align: center;
+	transform: translateX(-50%);
+}
+.footer__btn {
+	flex: 0 0 25%;
+	width: 25%;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+/* pc웹 뷰 */
+@media (min-width: 520px) {
+	.pc__bg {
+		position: relative;
+		width: 100%;
+		background: #f1f1f1 !important;
+		overflow-x: clip;
+		overflow-y: overlay;
+	}
+	.pc__container {
+		width: 520px;
+		margin: 0 auto;
+		position: relative;
+		border-left: 1px solid #dfdfdf;
+		border-right: 1px solid #dfdfdf;
+		background: #fff;
+		min-height: 100vh;
+		overflow: hidden;
+	}
+}

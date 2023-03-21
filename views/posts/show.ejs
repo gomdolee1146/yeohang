@@ -1,25 +1,30 @@
 <%- contentFor('post') %>
-<div class="posts">
-    <%- include ('./common/top.ejs') %>
-    <div class="show">
-        <h3> <%= data.title %></h3>
-        <div class="time">Created At <br />
-            <%= data.createdAt.toLocaleDateString() %> <br />
-            <%= data.createdAt.toLocaleTimeString() %> 
-        </div>
-        <% if (data.updatedAt) { %>
-            <div class="time">Updated at <br />
-                <%= data.updatedAt.toLocaleDateString() %> <br />
-                <%= data.updatedAt.toLocaleTimeString() %> 
-            </div>
-        <% } %>
-        <p class="body"> <%= data.body %></p>
-        <div class="tools">
-            <a href="/posts/<%= data._id %>/edit"><button>EDIT</button></a>
-            <form class="btn_delete" action="/posts/<%=data._id%>?_method=delete" method="post">
-                <button type="submit">Delete</button>
-            </form>
-        </div>
+<%- include ('./common/top.ejs') %>
+<a href="/posts" class="btn_back"><button>Back</button></a>
+<div class="posts_show">
+    <div class="posts__thumb_box">
+        <img class="posts__thumb" src="/public/img/img_sample.png" />
     </div>
-    <a href="/posts"><button>Back</button></a>
+    <h3 class="posts_show__title"> <%= data.title %></h3>
+    <% if (data.createdAt && !data.updatedAt) { %>
+    <div class="posts_show__info-time">Created At <br />
+        <%= data.createdAt.toLocaleDateString() %> <br />
+        <%= data.createdAt.toLocaleTimeString() %> 
+    </div>
+    <% } %>
+    <% if (data.updatedAt) { %>
+        <div class="posts_show__info-time">Updated at <br />
+            <%= data.updatedAt.toLocaleDateString() %> <br />
+            <%= data.updatedAt.toLocaleTimeString() %> 
+        </div>
+    <% } %>
+    <p class="posts_show__content"> <%= data.body %></p>
 </div>
+<div class="posts__tool">
+    <a class="posts_tool__btn-edit" href="/posts/<%= data._id %>/edit"><button>EDIT</button></a>
+    <form class="posts_tool__btn-dlt" action="/posts/<%=data._id%>?_method=delete" method="post">
+        <button type="submit">Delete</button>
+    </form>
+</div>
+<%- include ('./common/btm.ejs') %>
+  

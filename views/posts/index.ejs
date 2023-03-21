@@ -1,20 +1,21 @@
 <%- contentFor('post') %>
-<div class="posts">
-    <%- include ('./common/top.ejs') %>
-    <a class="posts__btn-new" href="/posts/new"><button>New</button></a>
-    <div class="posts__wrap">
-        <ul class="posts__container">
-            <% data.forEach(function(e){ %>
-                <li class="posts__list">
-                    <a class="posts__link" href="/posts/<%= e._id %>">
-                        <div class="posts__box">
-                            <p class="posts__title"><%= e.title %></p>
-                            <span class="posts__date"> <%= e.createdAt.toLocaleDateString() %></span>
+<%- include ('./common/top.ejs') %>
+<!-- <a class="posts__btn-new"><button>New</button></a> -->
+<div class="posts__wrap">
+    <ul class="posts__container">
+        <% data.forEach(function(e){ %>
+            <li class="posts__list">
+                <a class="posts__link" href="/posts/<%= e._id %>">
+                    <div class="posts__box">
+                        <div class="posts__thumb_box">
+                            <img class="posts__thumb" src="/public/img/img_sample.png" />
                         </div>
-                    </a>
-                </li>
-            <% }) %>
-        </ul>
-    </div>
+                        <p class="posts__title"><%= e.title %></p>
+                        <span class="posts__date"> <%= e.createdAt.toLocaleDateString() %></span>
+                    </div>
+                </a>
+            </li>
+        <% }) %>
+    </ul>
 </div>
-    
+<%- include ('./common/btm.ejs') %>

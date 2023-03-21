@@ -1,4 +1,0 @@
-@media (min-width: 520px) {
-	.pc__bg{position:relative; width:100%; background:#f1f1f1 !important; overflow-x:clip; overflow-y:overlay; }
-	.pc__container{width:520px; margin:0 auto; position:relative; border-left:1px solid #dfdfdf; border-right:1px solid #dfdfdf; background:#fff; min-height:100vh; overflow:hidden; }
-}

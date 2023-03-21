@@ -5,12 +5,14 @@
     </head>
     <body class="pc__bg">
         <div class="pc__container">
-            <header>
+            <header class="header">
                 <%- include ('./components/header.ejs') %>
             </header>
-            <%- defineContent('post') %>
+            <section class="section">
+                <%- defineContent('post') %>
+            </section>
             <%- body %>
-            <footer>
+            <footer class="footer">
                 <%- include ('./components/footer.ejs') %>
             </footer>
         </div>

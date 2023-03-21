@@ -1,16 +1,15 @@
 <%- contentFor('post') %>
-<div class="post">
-    <%- include ('./common/top.ejs') %>
-    <div class="edit">
-        <h3>Edit post</h3>
-        <form class="posts_form" action="/posts/<%= data._id %>?_method=post" method="post">
-            <label>Title</label>
-            <input type="text" name="post[title]" value="<%=data.title%>">
+<%- include ('./common/top.ejs') %>
+<div class="edit">
+    <h3>Edit post</h3>
+    <form class="posts_form" action="/posts/<%= data._id %>?_method=post" method="post">
+        <label>Title</label>
+        <input type="text" name="post[title]" value="<%=data.title%>">
 
-            <label>Body</label>
-            <textarea name="post[body]"><%=data.body%></textarea>
-            <button type="submit">Submit</button>
-        </form>
-        <a href="javascript:history.back()"><button>Back</button></a>
-    </div>
+        <label>Body</label>
+        <textarea name="post[body]"><%=data.body%></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    <a href="javascript:history.back()"><button>Back</button></a>
 </div>
+<%- include ('./common/btm.ejs') %>

@@ -48,6 +48,7 @@ app.set('view engine', 'ejs');
 // ===========================================
 // set middlewares
 app.use(express.static(path.join(__dirname, 'public')));    // public 폴더 내 요소들 사용
+app.use('/public', express.static('public'))
 app.use(bodyParser.json()); // 미들웨어 - json으로 데이터 분석.
 app.use(bodyParser.urlencoded({extended:true}))   // JSON 데이터를 전송할 경우 받는 body parser
 app.use(methodOverride("_method"));

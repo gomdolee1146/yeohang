@@ -1,0 +1,19 @@
+<%- include ('./common/top.ejs') %>
+<a class="btn_back" href="javscript:history.back()"><button>back</button></a>
+<h2 class="login_logo">YH_gram</h2>
+<form class="login_form" action="/login" method="post">
+    <div class="login__box">
+        <label class="login__label">이메일</label>
+        <input type="text" name="email" value="<%= email %>" class="login__input" />
+    </div>
+    <div class="login__box">
+        <label class="login__label">비밀번호</label>
+        <input type="password" name="password" value="" class="login__input" />
+    </div>
+    <% loginError.forEach(function(e){ %>
+        <p class="login__txt-error"><%= e %></p>
+    <% }) %>
+    <button class="login__btn-login" type="submit">Submit</button>
+</form>
+<a class="login__btn-join" href="/users/new"><button>Join</button></a>
+<%- include ('./common/btm.ejs') %>

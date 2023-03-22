@@ -1,0 +1,18 @@
+<%- include ('./common/top.ejs') %>
+<a class="btn_back" href="javscript:history.back()"><button>back</button></a>
+<div class="mypage">
+    <h4>회원정보</h4>
+    <div class="mypage__content">
+        <div class="mypage__box">
+            <p class="mypage__title">Email</p>
+            <p class="mypage__info"> <%= user.email %></p>
+        </div>
+        <div class="mypage__box">
+            <p class="mypage__title">Nickname</p>
+            <p class="mypage__info"> <%= user.Nickname %></p>
+        </div>
+    </div>
+    <a class="mypage__btn-edit" href="/users/<%= user._id %>/edit"><button>Edit</button></a>
+</div>
+<script type="text/javascript" src="/js/join.js"></script>
+<%- include ('./common/btm.ejs') %>

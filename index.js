@@ -107,6 +107,10 @@ app.get('/', function(req, res){
   res.redirect('/posts')
 });
 
+app.get('/login', function(req, res){
+  res.render('login/login', {email:req.flash('email')[0], loginError: req.flash('loginError')})
+})
+
 // login routes
 app.post('/login', function(req, res, next){
   req.flash('email');
@@ -144,13 +148,44 @@ app.get('/users/new', function(req, res){   // new
 })
 
 // 회원가입 create
+
+
 // 회원가입 show
+app.get('/users/:id', function(req, res){
+  User.findById(req.params.id)
+    .then(res => {
+      res.render('users/show', {user: user});
+    })
+    .catch(err => {
+      return res.json({success:false, message:err});
+    })
+})
+
+// 회원정보 수정 
+app.get('/users/:id/edit', function(){
+  User.findById(req.params.id)
+    .then(res => {
+      res.render('users/edit', {
+        user:             user,
+        formData:         req.flash('formData')[0],
+        emailError:       req.flash('emailError')[0],
+        nicknameError:    req.flash('nicknameError')[0],
+        passwordError:    req.flash('passwordError')[0]
+      })
+    })
+})
+
+// 비밀번호 확인하기
+
+// 로그인 회원정보 일치여부 확인하기
+
+
 
 // 게시판 routes
 app.get('/posts', function(req, res) {    // index
   Post.find({}).sort('-createdAt')
     .then(posts => {
-      res.render('posts/index', {data:posts})
+      res.render('posts/index', {data:posts, user:req.user})
     })
     .catch(err => {
       return res.json({success:false, message:err})

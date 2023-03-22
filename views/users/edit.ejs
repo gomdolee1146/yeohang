@@ -1,0 +1,37 @@
+<%- include ('./common/top.ejs') %>
+<div class="join_edit">
+
+    <h4 class="join_new__title">회원정보 수정</h4>
+
+    <form id="create_user" class="join__form" action="/users" method="post">
+        <div class="join__box">
+            <label class="join_form__label">현재 비밀번호</label>
+            <input type="text" id="password" name="user[password]" value="" />
+            <p id="password_error" class="join__txt-error"> <%= passwordError?passwordError:'' %></p>
+        </div>
+        <div class="join__box">
+            <label class="join_form__label">이메일*</label>
+            <input type="text" id="email" name="user[email]" value="<%= formData?formData.email:'' %>" />
+            <p id="email_error" class="join__txt-error"> <%= emailError?emailError:'' %></p>
+        </div>
+        <div class="join__box">
+            <label class="join_form__label">닉네임*</label>
+            <input type="text" id="nickname" name="user[nickname]" value="<%= formData?formData.nickname:'' %>" />
+            <p id="nickname_error" class="join__txt-error"> <%= nicknameError?nicknameError:'' %></p>
+        </div>
+        <div class="join__box">
+            <label class="join_form__label">새 비밀번호</label>
+            <input type="text" id="new_password" name="user[newPassword]" value="" />
+        </div>
+        <div class="join__box">
+            <label class="join_form__label">비밀번호 확인</label>
+            <input type="text" id="password_confirmation" name="user[passwordConfirmation]" value="" />
+            <p id="password_confirmation_error" class="join__txt-error"></p>
+        </div>
+
+        <input type="button" value="Submit" class="join__btn-submit" />
+        <!-- <button class="join__btn-submit" type="submit"></button> -->
+    </form>
+</div>
+<script type="text/javascript" src="/js/join.js"></script>
+<%- include ('./common/btm.ejs') %>

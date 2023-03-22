@@ -5,18 +5,8 @@
     </head>
     <body class="pc__bg">
         <div class="pc__container">
-            <header class="header">
-                <%- include ('./components/header.ejs') %>
-            </header>
-            <section class="section">
-                <%- defineContent('post') %>
-            </section>
             <%- body %>
-            <footer class="footer">
-                <%- include ('./components/footer.ejs') %>
-            </footer>
         </div>
-     
         <%- script %>
     </body>
 </html>

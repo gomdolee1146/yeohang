@@ -18,6 +18,7 @@
   "homepage": "https://github.com/gomdolee1146/yeohang#readme",
   "dependencies": {
     "async": "^3.2.4",
+    "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.20.2",
     "connect-flash": "^0.1.1",
     "ejs": "^3.1.9",

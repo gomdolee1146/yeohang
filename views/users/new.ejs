@@ -3,7 +3,7 @@
     <h3 class="join__logo">YH_gram</h3>
     <h4 class="join_new__title">회원가입</h4>
 
-    <!-- <form id="create_user" class="join__form" action="/users" method="post">
+    <form id="create_user" class="join__form" action="/users" method="post">
         <div class="join__box">
             <label class="join_form__label">이메일</label>
             <input class="join_form__input" type="text" id="email" name="user[email]" value="<%= formData?formData.email:'' %>" />
@@ -25,26 +25,8 @@
             <p id="password_confirmation_error" class="join__txt-error"></p>
         </div>
 
-        <input type="button" value="Submit" class="join__btn-submit" />
-    </form> -->
-
-    <form id="create_user" class="users_form" actions="/users" method="post">
-        <label>Email * <span id="email_error" class="error_message"><%= emailError?emailError:'' %></span> </label>
-        <input type="text" id="email" name="user[email]" value="<%= formData?formData.email:'' %>" >
-
-        <label>nickname * <span id="nickname_error" class="error_message"><%= nicknameError?nicknameError:'' %></span> </label>
-        <input type="text" id="nickname" name="user[nickname]" value="<%= formData?formData.nickname:'' %>" >
-        
-        <label>password * <span id="password_error" class="error_message"><%= passwordError?passwordError:'' %></span> </label>
-        <input type="text" id="password" name="user[password]" value="" >
-
-        <label>password confirmation * <span id="password_confirmation_error" class="error_message"></span> </label>
-        <input type="text" id="password_confirmation" name="user[passwordConfirmation]" value="" >
-
-        <input type="button" class="submit_btn" value="Submit" />
+        <button type="submit" class="join__btn-submit">Submit</button>
     </form>
-
-
 </div>
 <script type="text/javascript" src="/js/join.js"></script>
 

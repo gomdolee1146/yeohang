@@ -23,6 +23,15 @@ db.on('error', function(err) {
 })
 
 // ===========================================
+// 회원정보 관련
+var userSchema = mongoose.Schema({
+  email:        {type:String, required:true, unique:true},
+  nickname:     {type:String, required:true},
+  password:     {type:String, required:true},
+  createdAt:    {type:Date, default:Date.now}
+})
+var User = mongoose.model('user', userSchema);
+
 // 게시글 관련
 var postSchema = mongoose.Schema({
   title:        {type:String, required:true},
@@ -31,31 +40,6 @@ var postSchema = mongoose.Schema({
   updatedAt:    Date  
 })
 var Post = mongoose.model('post', postSchema);
-
-// 회원정보 관련
-var bcrypt = require('bcrypt-nodejs');
-
-var userSchema = mongoose.Schema({
-  email:        {type:String, required:true, unique:true},
-  nickname:     {type:String, required:true, unique:true},
-  password:     {type:String, required:true},
-  createdAt:    {type:Date, default:Date.now},
-})
-var User = mongoose.model('user', userSchema);
-
-userSchema.pre('save', function(next){
-  var user = this;
-  if (!user.isModified('password')){
-    return next();
-  } else {
-    user.password = bcrypt.hashSync(user.password);
-    return next();
-  }
-});
-userSchema.methods.authenticate = function(password){
-  var user = this;
-  return bcrypt.compareSync(password, user.password);
-}
 
 // ===========================================
 // view setting
@@ -71,16 +55,17 @@ app.use(methodOverride("_method"));
 app.use(flash());
 
 app.use(session({secret:'MySecret'}));
-app.use(passport.initialize());
+app.use(passport.initialize())
 app.use(passport.session());
 
-passport.serializeUser(function(user, done){
+passport.serializeUser(function(user, done){    // 현재 user 개체를 넘겨받아, user의 DB _id를 저장.
   done(null, user.id);
-});
-passport.deserializeUser(function(id, done){
-  User.findById(id, function(err, user) {
-    done(err, user);
-  })
+})
+passport.deserializeUser(function(id, done){    // 위에서 저장한 id에서 user를 찾아 가져옴.
+  User.findById(id)
+    .then((err, user) => {
+      done(err, user);
+    })
 })
 
 app.use(expressLayouts);
@@ -90,30 +75,29 @@ app.set("layout extractScripts", true);
 // ===========================================
 // Login Strategy
 var LocalStrategy = require('passport-local').Strategy;
-passport.use('local-login', 
+passport.use('local-login',
   new LocalStrategy({
-      usernameField:          'email',
-      passwordField:          'password',
-      passReqToCallback:      true
-    },
-    function(req, email, password, done){
-      User.findOne({'email':email})
-        .then(user => {
-          if (!user) {
-            req.flash('email', req,body.email);
-            return done(null, false, req.flash('loginError', '없는 아이디 입니다'));
-          }
-
-          if (!user.authenticate(password)){
-            req.flash('email', req.body.email);
-            return done(null, false, req.flash('loginError', '비밀번호가 맞지 않습니다.'));
-          }
-        })
-        .catch(err => {
-          return done(err);
-        })
-    }
-  )
+    usernameField:          'email',
+    passwordField:          'password',
+    passReqToCallback:      true
+  }, 
+  function(req, email, password, done){
+    User.findOne({'email': email})
+      .then(user => {
+        if (!user){
+          req.flash('email', req.body.email);
+          return done(null, false, req.flash('loginError', '존재하지 않는 아이디입니다.'))
+        } 
+        if (user.password != password){
+          req.flash('email', req.body.email);
+          return done(null, false, req.flash('loginError', '비밀번호가 틀렸습니다.'));
+        }
+        return done(null, user);
+      })
+      .catch(err => {
+        if (err) return done(err);
+      })
+  })
 )
 
 // ===========================================
@@ -123,71 +107,62 @@ app.get('/', function(req, res){
 });
 
 app.get('/login', function(req, res){
-  res.render('login/login', {email:req.flash('email')[0], loginError: req.flash('loginError')})
-})
+  res.render('login/login', {email:req.flash("email")[0], loginError: req.flash('loginError')})
+});
 
-// login routes
 app.post('/login', function(req, res, next){
   req.flash('email');
-
-  if (req.body.email.length === 0 || req.body.password.length === 0){
+  if(req.body.email.length === 0 || req.body.password.length === 0){
     req.flash('email', req.body.email);
-    req.flash('loginError', 'Please enter both Email and password');
+    req.flash('loginError', '이메일과 비밀번호를 입력해주세요.')
     res.redirect('/login');
   } else {
     next();
   }
 }, passport.authenticate('local-login', {
-  successRedirect: '/posts',
-  failureRedirect: '/login',
-  failureFlash: true
+    successRedirect:    '/posts',
+    failureRedirect:    '/login',
+    failureFlash:       true
   })
 )
 
-// logout routes
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 })
 
-// 회원가입 routes
-app.get('/users/new', function(req, res){   // new
+app.get('/users/new', function(req, res){   // 회원가입
   res.render('users/new', {
-    formData:       req.flash('formData')[0],
-    emailError:     req.flash('emailError')[0],
-    nicknameError:  req.flash('nicknameError')[0],
-    passwordError:  req.flash('passwordError')[0]
-   }
-  )
+    formData:           req.flash('formData')[0],
+    emailError:         req.flash('emailError')[0],
+    nicknameError:      req.flash('nicknameError')[0],
+    passwordError:      req.flash('passwordError')[0]
+  })
 })
 
-// 회원가입 create
-app.post('/users', checkUserRegValidation, function(req, res, next){
+app.post('/users', checkUserRegValidation, function(req, res, next){    // 회원가입 create
   User.create(req.body.user)
-    .then(res => {
+    .then(user => {
       res.redirect('/login')
     })
     .catch(err => {
-      return res.json({success:false, message:err});
+      if (err) return res.json({success:false, message:err})
     })
 })
 
-// 회원가입 show
-app.get('/users/:id', function(req, res){
+app.get('/users/:id', function(req, res){   // 회원정보보기
   User.findById(req.params.id)
-    .then(res => {
-      res.render('users/show', {user: user});
+    .then(user => {
+      res.render('users/show', {user:user});
     })
     .catch(err => {
       return res.json({success:false, message:err});
     })
 })
 
-// 회원정보 수정 
-app.get('/users/:id/edit', isLoggedIn, function(req, res){
-  if (req.user._id != req.params.id) return res.json({success:false, message:'로그인된 계정'})
+app.get('/users/:id/edit', function(req, res){    // 회원정보 수정
   User.findById(req.params.id)
-    .then(res => {
+    .then(user => {
       res.render('users/edit', {
         user:             user,
         formData:         req.flash('formData')[0],
@@ -198,15 +173,12 @@ app.get('/users/:id/edit', isLoggedIn, function(req, res){
     })
 })
 
-// 로그인 회원정보 일치여부 확인하기
-app.put('/users/:id', isLoggedIn, checkUserRegValidation, function(req, res){
-  if (req.user._id != req.params.id) return res.json({success:false, message:'로그인된 계정'})
+app.put('/users/:id', checkUserRegValidation, function(req, res){
   User.findById(req.params.id, req.body.user)
     .then(user => {
-      if(user.authenticate(req.body.user.password)){
+      if(req.body.user.password == user.password){
         if (req.body.user.newPassword){
-          user.password = req.body.user.newPassword;
-          user.save();
+          req.body.user.password = req.body.user.newPassword
         } else {
           delete req.body.user.password;
         }
@@ -219,58 +191,48 @@ app.put('/users/:id', isLoggedIn, checkUserRegValidation, function(req, res){
           })
       } else {
         req.flash('formData', req.body.user);
-        req.flash('passwordError', '- Invalid password');
-        res.redirect('/users/' + req.params.id + '/edit');
+        req.flash('passwordError', '유효하지 않은 비밀번호')
+        res.redirect('/users/'+ req.params.id + '/edit');
       }
+    })
+    .catch(err => {
+      return res.json({success:'false', message:err})
     })
 })
 
-const ObjectId = require('mongoose').ObjectId;
-// $ne: mongoose.Schema.ObjectId(req.params.id)
-
-// 로그인 회원정보 일치여부 확인하기
 function checkUserRegValidation(req, res, next){
   var isValid = true;
 
-  // async.waterfall :: 비동기함수를 동기함수처럼 사용하기
-  async.waterfall([
-    function(callback){
-      User.findOne({email: req.body.user.email, _id: {$ne: new mongoose.Types.ObjectId(req.params.id)}})
-        .then(user => {
-          if (user) {
-            isValid = false;
-            req.flash('emailError', '동일한 아이디가 있습니다.')
-          }
-        })
-    }, function(isValid, callback){
-      User.findOne({nickname: req.body.user.nickname, _id: {$ne: new mongoose.Types.ObjectId(req.params.id)}})
-        .then(user => {
-          if(user){
-            isValid = false;
-            req.flash('nicknameError', '동일한 닉네임이 있습니다.')
-          }
-          callback(null, isValid);
-        })
+  async.waterfall(
+    [function(callback){
+        User.findOne({email:req.body.user.email, _id: {$ne: new mongoose.Types.ObjectId(req.params.id)}})
+          .then((err, user) => {
+            if(user){
+              isValid = false;
+              req.flash('emailError', '이미 있는 아이디입니다.')
+            }
+            callback(null, isValid);
+          })
+      }, function(isValid, callback){
+        User.findOne({nickname: req.body.user.nickname, _id: {$ne: new mongoose.Types.ObjectId(req.params.id)}})
+          .then((err, user) => {
+            if(user){
+              isValid = false;
+              req.flash('nicknameError', '이미 있는 닉네임입니다.')
+            }
+          })
+      }
+    ], function(err, isValid){
+      if(err) return res.json({success:'false', message:err});
+      if(isValid){
+        return next();
+      } else {
+        req.flash('formData', req.body.user);
+        res.redirect('back');
+      }
     }
-  ], function(err, isValid){
-    if(err) return res.json({success:'false', message:err});
-    if(isValid){
-      return next();
-    } else {
-      req.flash('formData', req.body.user);
-      res.redirect('back');
-    }
-  })
+  )
 }
-
-// 현재 로그인된 상태인지 확인하기
-function isLoggedIn(req, res, next){
-  if (req.isAuthentificated()){
-    return next();
-  }
-  res.redirect('/');
-}
-
 
 // 게시판 routes
 app.get('/posts', function(req, res) {    // index

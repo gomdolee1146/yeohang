@@ -12,6 +12,10 @@ const async                 = require('async');
 const bodyParser            = require('body-parser')
 const methodOverride        = require('method-override');
 
+// 게시글 관련 모듈
+const postsRouter = require('./routes/posts');
+app.use('/posts', postsRouter);
+
 mongoose.connect(process.env.MONGO_DB);
 
 var db = mongoose.connection;
@@ -31,15 +35,6 @@ var userSchema = mongoose.Schema({
   createdAt:    {type:Date, default:Date.now}
 })
 var User = mongoose.model('user', userSchema);
-
-// 게시글 관련
-var postSchema = mongoose.Schema({
-  title:        {type:String, required:true},
-  body:         {type:String, required:true},
-  createdAt:    {type:Date, default:Date.now},
-  updatedAt:    Date  
-})
-var Post = mongoose.model('post', postSchema);
 
 // ===========================================
 // view setting
@@ -234,75 +229,7 @@ function checkUserRegValidation(req, res, next){
   )
 }
 
-// 게시판 routes
-app.get('/posts', function(req, res) {    // index
-  Post.find({}).sort('-createdAt')
-    .then(posts => {
-      res.render('posts/index', {data:posts, user:req.user})
-    })
-    .catch(err => {
-      return res.json({success:false, message:err})
-    })
-})
 
-app.get('/posts/new', function(req, res){   // new
-  res.render('posts/new')
-})
-
-app.post('/posts', function(req, res){    // create
-  Post.create(req.body.post)
-    .then(post => {
-      // return res.json({success:true, data:post}) // 확인용.
-      res.redirect('/posts')
-    })
-    .catch(err => {
-      return res.json({success:false, message:err})
-    })
-})
-
-app.get('/posts/:id', function(req, res){    // show
-  Post.findById(req.params.id)
-    .then(post => {
-      // return res.json({success:true, data:post})  
-      return res.render('posts/show', {data:post});
-    })
-    .catch(err => {
-      return res.json({success:false, message:err})
-    })
-})
-
-app.get("/posts/:id/edit", function(req, res){    // edit
-  Post.findById(req.params.id)
-    .then(post => {
-      res.render('posts/edit', {data:post})
-    })
-    .catch(err => {
-      return res.json({success:false, message:err});
-    })
-})
-
-app.post('/posts/:id', function(req, res){    // update
-  req.body.post.updatedAt = Date.now();
-  Post.findByIdAndUpdate(req.params.id, req.body.post)
-    .then(post => {
-      // return res.json({success:true, message:post._id+" updated"})
-      res.redirect('/posts/'+req.params.id);
-    })
-    .catch(err => {
-      return res.json({success:false, message:err});
-    })
-})
-
-app.delete("/posts/:id", function(req, res){    // destroy (delete)
-  Post.findByIdAndRemove(req.params.id)
-    .then(post => {
-      // return res.json({success:true, message:post._id+" deleted"})
-      res.redirect('/posts')
-    })
-    .catch(err => {
-      return res.json({success:false, message:err});
-    })
-})
 
 
 
